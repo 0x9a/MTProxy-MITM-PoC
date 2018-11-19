@@ -1,0 +1,85 @@
+﻿[+] Title:MTProto Proxy Telegram Man In The Middle
+[+] Credits: Unkn0wn [ 0x9a@tutanota.com ]
+[+] Website: iran-cyber.net
+[+] Iran Cyber Security Group
+[+] Source:  https://github.com/TelegramMessenger/MTProxy
+[+] Date:2018-11-20           
+  
+ 
+ 
+Vendor:
+==================
+www.Telegram.org
+ 
+ 
+ 
+Product:
+========
+MTProto Proxy
+ 
+ 
+MTProto proxy – it is essentially a client Telegram, which runs on a remote server.
+I.e, All functions such as sending / receiving messages are performed on it, and then transferred to your application on your smartphone or PC.
+but, the intricacies of the work MTProxy I did not mess about, perhaps, then it'll.
+ 
+ 
+ 
+Vulnerability Type:
+===================
+Man-in-the-Middle (MITM)
+
+ 
+ 
+ 
+Security Issue:
+===============
+PoC:
+for use this vulnerability we need 2 server.
+MTProxy IP Server:127.0.0.1
+Attacker IP Server:127.0.0.2
+Target: IP: 127.0.0.3
+------
+run MTProxy in one server (127.0.0.1) now get your MTProxy url:
+tg://proxy?server=127.0.0.1&port=443&secret=abcdefgh1234567jgdnjdvjsvasdcc
+you share it!
+now attacker get your proxy and with new Server redirect your Trffics with new ip address:
+ Attacker Server (127.0.0.2):
+ Commands For Redirect Your Traffics==>
+ iptables -t nat -A PREROUTING -p tcp --dport 443 -j DNAT --to-destination 127.0.0.1:443
+ iptables -t nat -A POSTROUTING -j MASQUERADE
+ -
+ Now could be the url of the new share
+ new Proxy URL:
+ 
+ -
+ now send it for target!
+ When Target use it Attacker can Sniff Packet's in your Server With * TCPDUMP Tool *
+ and get Realy IP Address of Target!
+ 
+ -
+ TcpDump Command:
+ tcpdump -n -S -s 0 -A 'tcp dst port 443'
+ 
+ with this command attacker can sniff All Packets Send With Target
+ 
+ -
+ Demo:
+ 
+ https://pasteboard.co/HNWRLsa.png
+ 
+ -
+note:* We Can Decrypt SSL With WireShark to get other information into Telegram Messenger Target.
+
+
+
+Network Access:
+===============
+Remote/Local
+ 
+ 
+ 
+Severity:
+=========
+High
+ 
+#ICSG
